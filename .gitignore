@@ -1,0 +1,4 @@
+.vscode
+__pycache__/
+yolov5/models/__pycache__/
+yolov5/yolov5x6.pt
