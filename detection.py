@@ -15,7 +15,7 @@ from dataset import CameraStream
 
 
 class Detection():
-    def __init__(self,weights='yolov5/yolov5x6.pt',conf_thres=0.45,iou_thres=0.1) -> None:
+    def __init__(self,weights='yolov5/yolov5x6.pt',conf_thres=0.25,iou_thres=0.1) -> None:
         #initq
         self.conf_thres = conf_thres
         self.iou_thres = iou_thres

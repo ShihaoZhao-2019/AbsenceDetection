@@ -27,11 +27,12 @@ class Task():
         boxes = [line.split(' ') for line in lines]
         boxes.pop()
         for box in boxes:
-            if(len(box) ==  4):
+            if(len(box) ==  5):
                 box[0] = int(float(box[0].split(':')[1]))
                 box[1] = int(float(box[1].split(':')[1]))
                 box[2] = int(float(box[2].split(':')[1]))
                 box[3] = int(float(box[3].split(':')[1]))
+                box[4] = box[4].split(':')[1]
 
                 self.xywh_to_xyxy(box)
 
@@ -71,7 +72,7 @@ class Task():
 
     def draw_coordinates(self,coordinates, image):
         """
-        将一组坐标绘制到给定的图像上，并在每个方框内部绘制美美的图案
+        将一组坐标绘制到给定的图像上
         
         参数:
         coordinates: 一个包含坐标的元组列表，每个元组以(x1, y1, x2, y2)的形式表示
@@ -82,25 +83,23 @@ class Task():
         """
         # 在图像上绘制每个坐标
         for coordinate in coordinates:
-            x1, y1, x2, y2 = coordinate
+            x1, y1, x2, y2 = coordinate[0],coordinate[1],coordinate[2],coordinate[3]
+            name = coordinate[4]
             
             # 绘制方框
-            cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
+            cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), thickness=4)
             
             # 在方框内部绘制美美的图案
             center_x = int((x1 + x2) / 2)
             center_y = int((y1 + y2) / 2)
             line_length = int(min(x2 - x1, y2 - y1) / 2)
-            thickness = int(line_length / 8)
+            thickness = int(line_length / 16)
             
             # 绘制圆形
             cv2.circle(image, (center_x, center_y), line_length, (0, 0, 255), thickness)
             
-            # 绘制十字
-            cv2.line(image, (center_x - line_length, center_y), 
-                    (center_x + line_length, center_y), (0, 0, 255), thickness)
-            cv2.line(image, (center_x, center_y - line_length), 
-                    (center_x, center_y + line_length), (0, 0, 255), thickness)
+            cv2.putText(image, name, (center_x, center_y), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+
         
         return image
 
